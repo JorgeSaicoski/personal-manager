@@ -1,0 +1,39 @@
+version: "3.8"
+
+services:
+  todo-list:
+    extends:
+      file: go-todo-list/docker-compose.yaml
+      service: todo-list
+    depends_on:
+      - db
+    networks:
+      - app-network
+
+  frontend:
+    extends:
+      file: frontend/docker-compose.yaml
+      service: frontend
+    networks:
+      - app-network
+
+  db:
+    extends:
+      file: infra/db/docker-compose.yaml
+      service: db
+    networks:
+      - app-network
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+
+networks:
+  app-network:
+    external: true
+
+volumes:
+  postgres_data:
+    external: true
+  keycloak_data:
+    external: true
+

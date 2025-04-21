@@ -1,0 +1,6 @@
+[submodule "frontend"]
+	path = frontend
+	url = git@github.com:JorgeSaicoski/personal-manager-nextjs.git
+[submodule "go-todo-list"]
+	path = go-todo-list
+	url = git@github.com:JorgeSaicoski/go-todo-list.git
