@@ -4,10 +4,10 @@ A comprehensive personal management system built with a Go backend and Next.js f
 
 This platform aims to be a central hub for personal organization, integrating multiple management modules:
 - [x] Task management
-- [] Time management
-- [] Finance tracking
-- [] Notes and personal documentation
-- [] And more planned features
+- [ ] Time management
+- [ ] Finance tracking
+- [ ] Notes and personal documentation
+- [ ] And more planned features
 
 ## Project Structure
 
