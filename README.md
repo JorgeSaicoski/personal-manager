@@ -3,11 +3,11 @@
 A comprehensive personal management system built with a Go backend and Next.js frontend. This repository serves as the main project container using Git submodules to manage the different components.
 
 This platform aims to be a central hub for personal organization, integrating multiple management modules:
-[x] Task management
-[] Time management
-[] Finance tracking
-[] Notes and personal documentation
-[] And more planned features
+- [x] Task management
+- [] Time management
+- [] Finance tracking
+- [] Notes and personal documentation
+- [] And more planned features
 
 ## Project Structure
 
