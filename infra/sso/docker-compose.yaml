@@ -6,6 +6,11 @@ services:
     environment:
       KEYCLOAK_ADMIN: admin
       KEYCLOAK_ADMIN_PASSWORD: admin
+      DB_VENDOR: POSTGRES
+      DB_ADDR: shared-db
+      DB_DATABASE: shared_db
+      DB_USER: postgres
+      DB_PASSWORD: yourpassword
     command: start-dev
     ports:
       - "8080:8080"

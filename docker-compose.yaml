@@ -16,6 +16,9 @@ services:
       service: frontend
     networks:
       - app-network
+    depends_on:
+      - keycloak
+      - todo-list
 
   db:
     extends:
@@ -26,6 +29,16 @@ services:
     volumes:
       - postgres_data:/var/lib/postgresql/data
 
+  keycloak:
+    extends:
+      file: infra/sso/docker-compose.yaml
+      service: keycloak
+    networks:
+      - app-network
+    volumes:
+      - keycloak_data:/opt/keycloak/data
+    depends_on:
+      - db
 
 networks:
   app-network:
@@ -36,4 +49,3 @@ volumes:
     external: true
   keycloak_data:
     external: true
-
