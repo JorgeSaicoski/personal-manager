@@ -1,160 +1,191 @@
 # Personal Manager
 
-A comprehensive personal management system built with a Go backend and Next.js frontend. This repository serves as the main project container using Git submodules to manage the different components.
+A comprehensive personal management system built with microservices architecture. This platform serves as a central hub for personal organization, integrating multiple management modules through a unified API gateway.
 
-This platform aims to be a central hub for personal organization, integrating multiple management modules:
-- [x] Task management
-- [ ] Time management
-- [ ] Finance tracking
-- [ ] Notes and personal documentation
-- [ ] And more planned features
+## 🏗️ Architecture
 
-## Project Structure
+```
+Browser → Nginx Gateway (Port 80) → Microservices:
+├── /                   → Next.js Frontend (Port 3000)
+├── /api/tasks/*        → Go Task Service (Port 8000)
+├── /api/auth/*         → Keycloak SSO (Port 8080)
+├── /admin/[secret]/    → pgAdmin (Port 5050)
+└── /health            → Health Check
+```
 
-This repository is organized as follows:
+## 📋 Current Features
 
-- `frontend/`: Next.js frontend application (Git submodule)
-- `go-todo-list/`: Go backend service (Git submodule)
-- `infra/`: Infrastructure configuration
-  - `db/`: PostgreSQL database configuration
-  - `sso/`: Keycloak SSO service configuration
+- ✅ **Task Management**: Create, update, delete, and track tasks with different status levels
+- ✅ **Authentication**: Keycloak SSO integration for secure user management
+- ✅ **API Gateway**: Nginx reverse proxy for unified access
+- ✅ **Database**: PostgreSQL with pgAdmin for administration
 
-## Prerequisites
+## 🔮 Planned Features
 
+- [ ] **Finance Management**: Transaction tracking and budgeting
+- [ ] **Calendar Integration**: Scheduling and time management
+- [ ] **Notes System**: Personal documentation and notes
+- [ ] **Analytics Dashboard**: Personal insights and metrics
+
+## 📁 Project Structure
+
+```
+personal-manager/
+├── frontend/                 # Next.js frontend application
+├── go-todo-list/            # Go task management service
+├── infra/
+│   ├── nginx/               # API gateway configuration
+│   ├── db/                  # Database and pgAdmin setup
+│   └── sso/                 # Keycloak authentication service
+├── docker-compose.yaml      # Main orchestration file
+└── README.md               # This file
+```
+
+## 🚀 Quick Start
+
+### Prerequisites
+
+- Podman & Podman Compose (or Docker)
 - Git
-- Docker and Docker Compose
-- Go 1.23+ (for backend development)
-- Node.js 18.17.0+ (for frontend development)
-
-## Setup
 
 ### 1. Clone the Repository
 
-Clone the repository including all submodules:
-
 ```bash
-git clone --recurse-submodules git@github.com:YourUsername/personal-manager.git
+git clone --recurse-submodules https://github.com/JorgeSaicoski/personal-manager.git
 cd personal-manager
 ```
 
-If you already cloned the repository without submodules:
+### 2. Create Podman Network and Volumes
 
 ```bash
-git submodule init
-git submodule update
+podman network create app-network
+podman volume create postgres_data
+podman volume create keycloak_data
 ```
 
-### 2. Docker Setup
-
-First, create the required Docker network and volumes:
+### 3. Set Admin Security (Important!)
 
 ```bash
-docker network create app-network
-docker volume create postgres_data
-docker volume create keycloak_data
+# Navigate to nginx directory
+cd infra/nginx
+
+# Fix file permissions for containers
+chmod 644 nginx.conf
+
+# Create password file for admin access
+htpasswd -c .htpasswd admin
+# Enter a secure password when prompted
+
+# Set correct permissions for password file
+chmod 644 .htpasswd
 ```
 
-### 3. Running with Docker
 
-To run the entire stack (recommended for full application testing):
+### 4. Configure Production Security
 
-```bash
-docker-compose up
+Before deploying to production, update `infra/nginx/nginx.conf`:
+
+```nginx
+# Change this secret path:
+location /admin/db-a1b2c3d4e5f6/ {
+# To something like:
+location /admin/db-[your-random-string]/ {
 ```
 
-This will start:
-- PostgreSQL database (port 5432)
-- Keycloak SSO (port 8080)
-- Go backend (port 8000)
-- Next.js frontend (port 3000)
-
-Access the application at http://localhost:3000
-
-### 4. Development Setup
-
-For development, you can work with each component separately:
-
-#### Frontend Development:
+### 5. Deploy
 
 ```bash
-cd frontend
-npm install
-npm run dev
+# Development
+podman compose up
+
+# If need to update the backend
+podman compose up -d --build
+
+# Production  
+podman compose up -d
 ```
+If using Docker change to "docker-compose"
 
-The frontend will be available at http://localhost:3000
+## 🌐 Access Points
 
-#### Backend Development:
+- **Application**: http://localhost
+- **API Documentation**: http://localhost/api/tasks
+- **Admin Panel**: http://localhost/admin/db-a1b2c3d4e5f6/ (change this!)
+- **Health Check**: http://localhost/health
+
+## 🔧 Development
+
+### Individual Service Development
+
+Each microservice can be developed independently:
 
 ```bash
+# Task service only
 cd go-todo-list
-go run cmd/server/main.go
-```
+podman compose up
 
-The API will be available at http://localhost:8000
+# Frontend only  
+cd frontend
+npm run dev
 
-#### Running Individual Services:
-
-You can also run individual components with Docker:
-
-```bash
 # Database only
-docker-compose -f infra/db/docker-compose.yaml up
-
-# SSO service only
-docker-compose -f infra/sso/docker-compose.yaml up
-
-# Database + Backend (good for frontend development)
-docker-compose up db todo-list
+cd infra/db
+podman compose up
 ```
 
-## Current Features
+### Adding New Services
 
-The application currently includes:
+1. Create service directory: `my-new-service/`
+2. Add docker-compose.yaml for the service
+3. Update `infra/nginx/nginx.conf` with new routes:
+   ```nginx
+   location /api/mynewservice/ {
+       proxy_pass http://my-new-service:8001/;
+       # ... proxy headers
+   }
+   ```
+4. Add service to main `docker-compose.yaml`
 
-- **Task Management**: Create, view, update, and track tasks with different status levels
-- **Intuitive UI**: Clean, paper-like interface designed for pleasant user experience
-- **RESTful API**: Backend service with endpoints for task management
+## 🔒 Security
 
-Additional modules planned for future development:
-- Time tracking and scheduling
-- Financial management
-- Notes and documentation
-- Personal analytics and insights
+### Production Checklist
 
-## API Endpoints
+- [ ] Change admin route in `nginx.conf`
+- [ ] Set strong passwords for all services
+- [ ] Configure IP restrictions for admin access
+- [ ] Enable HTTPS with SSL certificates
+- [ ] Update default Keycloak admin credentials
+- [ ] Review and update CORS settings
 
-The backend currently provides the following endpoints:
+### Default Credentials (Change in Production!)
 
-- **GET /tasks**: Get all tasks
-- **POST /task**: Create a new task
-- **PATCH /task/update/:id**: Update a task
-- **GET /**: Frontend UI
+- **pgAdmin**: admin@admin.com / admin
+- **Keycloak**: admin / admin
+- **Nginx Basic Auth**: Set during setup
 
-## Environment Variables
+## 📖 Documentation
 
-### Frontend
+- [Frontend Documentation](frontend/README.md)
+- [Task Service Documentation](go-todo-list/README.md)
+- [Nginx Gateway Documentation](infra/nginx/README.md)
+- [Database Documentation](infra/db/README.md)
+- [Authentication Documentation](infra/sso/README.md)
 
-Create a `.env.local` file in the `frontend/` directory:
+## 🤝 Contributing
 
-```
-NEXT_PUBLIC_TASK_SERVICE_URL=http://localhost:8000
-```
+1. Fork the repository
+2. Create a feature branch
+3. Make your changes
+4. Add tests if applicable
+5. Submit a pull request
 
-### Backend
-
-Environment variables are configured in the docker-compose files. For local development without Docker, set up the following environment variables:
-
-```
-POSTGRES_HOST=localhost
-POSTGRES_PORT=5432
-POSTGRES_USER=postgres
-POSTGRES_PASSWORD=yourpassword
-POSTGRES_DB=shared_db
-POSTGRES_SSLMODE=disable
-ALLOWED_ORIGINS=http://localhost:3000
-```
-
-## License
+## 📄 License
 
 This project is licensed under the MIT License.
+
+## 🆘 Support
+
+For issues and questions:
+1. Check the documentation in each service directory
+2. Review the GitHub issues
+3. Create a new issue with detailed information

@@ -1,10 +1,22 @@
 version: "3.8"
 
 services:
+  nginx:
+    extends:
+      file: infra/nginx/docker-compose.yaml
+      service: nginx
+    networks:
+      - app-network
+    depends_on:
+      - frontend
+      - todo-list
+      - keycloak
+
   todo-list:
     extends:
       file: go-todo-list/docker-compose.yaml
       service: todo-list
+    ports: []
     depends_on:
       - db
     networks:
@@ -14,6 +26,7 @@ services:
     extends:
       file: frontend/docker-compose.yaml
       service: frontend
+    ports: []
     networks:
       - app-network
     depends_on:
@@ -24,6 +37,7 @@ services:
     extends:
       file: infra/db/docker-compose.yaml
       service: db
+    ports: []
     networks:
       - app-network
     volumes:
@@ -33,6 +47,7 @@ services:
     extends:
       file: infra/sso/docker-compose.yaml
       service: keycloak
+    ports: []
     networks:
       - app-network
     volumes:
@@ -43,6 +58,7 @@ services:
     extends:
       file: infra/db/docker-compose.yaml
       service: pgadmin
+    ports: []
     networks:
       - app-network
     depends_on:
