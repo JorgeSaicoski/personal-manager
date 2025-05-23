@@ -39,6 +39,14 @@ services:
       - keycloak_data:/opt/keycloak/data
     depends_on:
       - db
+  pgadmin:
+    extends:
+      file: infra/db/docker-compose.yaml
+      service: pgadmin
+    networks:
+      - app-network
+    depends_on:
+      - db
 
 networks:
   app-network:
