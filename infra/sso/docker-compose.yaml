@@ -10,8 +10,8 @@ services:
       KC_DB_USERNAME: postgres
       KC_DB_PASSWORD: yourpassword
       KC_HTTP_ENABLED: "true"
-      KC_HOSTNAME: localhost # Change to sarkis.dev for production
-      KC_HTTP_RELATIVE_PATH: /auth
+      KC_HOSTNAME_URL: "http://localhost:8080/keycloak" # Change in Production
+      KC_PROXY: edge
       KC_PROXY_HEADERS: forwarded
 
       # Additional production settings
