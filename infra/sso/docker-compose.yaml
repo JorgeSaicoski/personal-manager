@@ -1,21 +1,24 @@
-version: "3.8"
-
 services:
   keycloak:
-    image: quay.io/keycloak/keycloak:20.0.2
+    image: quay.io/keycloak/keycloak:26.2.4
     environment:
-      KEYCLOAK_ADMIN: admin
-      KEYCLOAK_ADMIN_PASSWORD: admin
-      DB_VENDOR: POSTGRES
-      DB_ADDR: shared-db
-      DB_DATABASE: shared_db
-      DB_USER: postgres
-      DB_PASSWORD: yourpassword
-    command: start-dev
-    networks:
-      - app-network
-    volumes:
-      - keycloak_data:/opt/keycloak/data
+      KC_BOOTSTRAP_ADMIN_USERNAME: admin
+      KC_BOOTSTRAP_ADMIN_PASSWORD: admin
+      KC_DB: postgres
+      KC_DB_URL_HOST: shared-db
+      KC_DB_URL_DATABASE: shared_db
+      KC_DB_USERNAME: postgres
+      KC_DB_PASSWORD: yourpassword
+      KC_HTTP_ENABLED: "true"
+      KC_HOSTNAME: localhost # Change to sarkis.dev for production
+      KC_HTTP_RELATIVE_PATH: /auth
+      KC_PROXY_HEADERS: forwarded
+
+      # Additional production settings
+      # KC_HEALTH_ENABLED: "true"
+      # KC_METRICS_ENABLED: "true"
+      # KC_LOG_LEVEL: INFO  # Add for production
+    command: start-dev # Change to 'start' for production
 
 networks:
   app-network:

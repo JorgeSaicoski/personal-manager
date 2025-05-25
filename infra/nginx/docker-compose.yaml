@@ -8,7 +8,7 @@ services:
       - "8080:80" # Change before going to prod
     volumes:
       - ./nginx.conf:/etc/nginx/conf.d/default.conf:Z
-      - ./.htpasswd:/etc/nginx/.htpasswd:Z # Optional safe layer
+      #- ./.htpasswd:/etc/nginx/.htpasswd:Z # Optional safe layer
     networks:
       - app-network
     depends_on:
