@@ -171,6 +171,16 @@ podman compose up
 - [Database Documentation](infra/db/README.md)
 - [Authentication Documentation](infra/sso/README.md)
 
+## 🔧 Custom Libraries & Ecosystem
+
+This project leverages and contributes to a growing ecosystem of reusable Go libraries:
+
+### Available Libraries
+- ✅ **[pgconnect](https://github.com/JorgeSaicoski/pgconnect)** - Generic PostgreSQL repository pattern with GORM
+- [ ] **keycloak-auth** - JWT validation middleware with automatic JWKS key rotation
+- [ ] **go-api-gateway** - HTTP routing and proxy utilities for API gateway services
+- [ ] **microservice-commons** - Shared utilities for microservice architecture (middleware, logging, config)
+
 ## 🤝 Contributing
 
 1. Fork the repository
