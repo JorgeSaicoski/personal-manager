@@ -163,6 +163,20 @@ podman compose up
 - **Keycloak**: admin / admin
 - **Nginx Basic Auth**: Set during setup
 
+### Configure Keycloak Account Console
+
+The account console may show a blank page due to CORS configuration. To fix this:
+
+1. Go to Keycloak admin console: `http://localhost:8080/keycloak/admin/`
+2. Login with admin/admin
+3. Go to **Clients** → **account-console**
+4. In **Access settings**, update **Web origins**:
+   - Remove the existing long URL
+   - Add: `http://localhost:8080`
+   - Click **Save**
+
+Now users can access their account settings at: `http://localhost:8080/keycloak/realms/master/account/`
+
 ## 📖 Documentation
 
 - [Frontend Documentation](frontend/README.md)
