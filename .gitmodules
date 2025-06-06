@@ -4,3 +4,6 @@
 [submodule "go-todo-list"]
 	path = go-todo-list
 	url = git@github.com:JorgeSaicoski/go-todo-list.git
+[submodule "go-project-manager"]
+	path = go-project-manager
+	url = git@github.com:JorgeSaicoski/go-project-manager.git
