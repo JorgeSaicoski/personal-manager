@@ -7,3 +7,6 @@
 [submodule "go-project-manager"]
 	path = go-project-manager
 	url = git@github.com:JorgeSaicoski/go-project-manager.git
+[submodule "professional-tracker"]
+	path = professional-tracker
+	url = git@github.com:JorgeSaicoski/professional-tracker.git
