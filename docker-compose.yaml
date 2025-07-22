@@ -10,6 +10,7 @@ services:
     depends_on:
       - frontend
       - todo-list
+      - project-core
       - keycloak
 
   todo-list:
@@ -19,6 +20,29 @@ services:
     ports: []
     depends_on:
       - db
+    networks:
+      - app-network
+
+  project-core:
+    extends:
+      file: go-project-manager/docker-compose.yaml
+      service: project-core
+    ports: []
+    depends_on:
+      - db
+      - keycloak
+    networks:
+      - app-network
+
+  professional-tracker:
+    extends:
+      file: professional-tracker/docker-compose.yaml
+      service: professional-tracker
+    ports: []
+    depends_on:
+      - db
+      - keycloak
+      - project-core
     networks:
       - app-network
 
@@ -32,6 +56,8 @@ services:
     depends_on:
       - keycloak
       - todo-list
+      - project-core
+      - professional-tracker
 
   db:
     extends:
@@ -54,6 +80,7 @@ services:
       - keycloak_data:/opt/keycloak/data
     depends_on:
       - db
+  
   pgadmin:
     extends:
       file: infra/db/docker-compose.yaml
