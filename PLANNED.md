@@ -60,11 +60,11 @@ type ProfessionalProject struct {
     ClientName      *string   // Optional client (THD for TCS project)
     SalaryPerHour   *float64  // For cost calculations
     TotalSalaryCost float64   // Calculated field
-    FreelanceProjects []FreelanceProject
+    ProjectAssignments []ProjectAssignment
     TimeSessions     []TimeSession
 }
 
-type FreelanceProject struct {
+type ProjectAssignment struct {
     ParentProjectID string  // Links to ProfessionalProject
     WorkerUserID    string  // Single worker only
     CostPerHour     float64
