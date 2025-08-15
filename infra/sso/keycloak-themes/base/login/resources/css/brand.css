@@ -1,0 +1,11 @@
+/* Keep it small and safe; PatternFly v5 variables work out of the box */
+:root {
+  /* optional brand colors */
+  --pf-global--primary-color--100: #1a73e8;
+  --pf-global--link--Color: #1a73e8;
+}
+
+/* Logo sizing tweak (optional) */
+.pf-v5-c-login__header .pf-v5-c-brand {
+  max-height: 36px;  /* adjust to taste */
+}
