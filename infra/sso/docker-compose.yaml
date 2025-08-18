@@ -16,9 +16,14 @@ services:
       KC_HOSTNAME_ADMIN_URL: "http://localhost:8080/keycloak"
       KC_THEME_CACHE_THEMES: false
       KC_THEME_CACHE_TEMPLATES: false
+      KC_SPI_THEME_ADMIN: keycloak
+      KC_SPI_THEME_LOGIN: keycloak
+      KC_SPI_THEME_ACCOUNT: keycloak
+      KC_SPI_THEME_EMAIL: keycloak
+
 
     volumes:
-      - ./sso/keycloak-themes:/opt/keycloak/themes
+      - ./keycloak-themes:/opt/keycloak/themes
     command: start-dev
     networks:
       - app-network
